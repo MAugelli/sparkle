@@ -34,9 +34,7 @@ type AppScreen = "welcome" | "profile-editor" | "chat";
 
 function App() {
   const [screen, setScreen] = useState<AppScreen>("welcome");
-  const [selectedNpcId, setSelectedNpcId] = useState<string | null>(
-    "npc_aurora",
-  );
+  const [selectedNpcId, setSelectedNpcId] = useState<string | null>(null);
 
   // Inizializza playerProfile da localStorage o default
   const [playerProfile, setPlayerProfile] = useState<PlayerProfile>(() => {
@@ -161,7 +159,6 @@ function App() {
         npc_luna: getInitialMessages("npc_luna"),
         npc_max: getInitialMessages("npc_max"),
       });
-      setSelectedNpcId("npc_aurora");
       // Rimuovi il flag della prima visita per mostrare i messaggi di benvenuto originali
       localStorage.removeItem("sparkle_first_visit_completed");
       // Rimani sulla welcome screen

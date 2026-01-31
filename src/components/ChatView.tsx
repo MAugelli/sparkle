@@ -1,19 +1,28 @@
 import { useRef, useEffect, useState } from "react";
-import { NPCProfile, Message, MessageChoice } from "../types";
+import { NPCProfile, Message, MessageChoice, PlayerProfile } from "../types";
 import ResponseChoices from "./ResponseChoices";
 import styles from "./ChatView.module.css";
+import { replaceMessagesPlaceholders } from "../utils/messageParser";
 
 interface ChatViewProps {
   npcProfile?: NPCProfile;
+  userProfile?: PlayerProfile;
   messages: Message[];
   onAddMessage?: (message: Message) => void;
 }
 
 export default function ChatView({
   npcProfile,
+  userProfile,
   messages,
   onAddMessage,
 }: ChatViewProps) {
+  const chatMessages = replaceMessagesPlaceholders(
+    messages,
+    userProfile!,
+    npcProfile!,
+  );
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [inputText, setInputText] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
@@ -306,7 +315,7 @@ export default function ChatView({
       </div>
 
       <div className={styles.chatMessages}>
-        {messages.map((msg) => (
+        {chatMessages.map((msg) => (
           <div key={msg.id} className={`${styles.msg} ${styles[msg.sender]}`}>
             {msg.text}
           </div>

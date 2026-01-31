@@ -12,6 +12,12 @@ export const replaceMessagePlaceholders = (
   const sharedInterests = getSharedInterests(playerProfile, npcProfile);
   const firstSharedInterest =
     sharedInterests.length > 0 ? sharedInterests[0] : "interessi comuni";
+  console.log(
+    "Replacing placeholders for message:",
+    message.text,
+    "with shared interest:",
+    firstSharedInterest,
+  );
 
   return {
     ...message,

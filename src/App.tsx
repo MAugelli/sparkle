@@ -29,6 +29,7 @@ import { nyxDialogueSet } from "./data/dialogues/nyx-branched";
 import { soraDialogueSet } from "./data/dialogues/sora-branched";
 import { lunaDialogueSet } from "./data/dialogues/luna-branched";
 import { maxDialogueSet } from "./data/dialogues/max-branched";
+import { replaceMessagesPlaceholders } from "./utils/messageParser";
 
 type AppScreen = "welcome" | "profile-editor" | "chat";
 
@@ -114,8 +115,9 @@ function App() {
   const chats: ChatType[] = npcProfiles.map((npc) => {
     const npcMessages = conversations[npc.id] || [];
     // Mostra pallino se l'ultimo messaggio è dell'NPC e ha scelte disponibili
-    const lastMessage =
-      npcMessages.length > 0 ? npcMessages[npcMessages.length - 1] : null;
+    const msg = replaceMessagesPlaceholders(npcMessages, playerProfile, npc);
+
+    const lastMessage = msg.length > 0 ? msg[msg.length - 1] : null;
     const canRespond =
       lastMessage &&
       lastMessage.sender === "npc" &&
@@ -300,6 +302,7 @@ function App() {
       />
       <ChatView
         npcProfile={selectedNpc}
+        userProfile={playerProfile}
         messages={currentMessages}
         onAddMessage={handleAddMessage}
       />

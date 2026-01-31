@@ -2,8 +2,28 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: radial-gradient(circle at center, #2c022c 0%, #121212 100%);
+  background: rgba(18, 18, 18, 0.95);
   overflow: hidden;
+  position: relative;
+}
+
+.bgWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bgWrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .emptyState {
@@ -13,12 +33,16 @@
   height: 100%;
   color: rgba(255, 255, 255, 0.5);
   font-size: 18px;
+  position: relative;
+  z-index: 1;
 }
 
 .chatHeader {
   background-color: #1e1e1e;
   padding: 15px 20px;
   border-bottom: 1px solid #333;
+  position: relative;
+  z-index: 2;
 }
 
 .headerContent {
@@ -50,6 +74,8 @@
   border-bottom: 1px solid #333;
   max-height: 180px;
   overflow-y: auto;
+  position: relative;
+  z-index: 2;
 }
 
 .profileCard {
@@ -109,6 +135,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .chatMessages::-webkit-scrollbar {
@@ -151,6 +179,8 @@
   border-top: 1px solid #333;
   display: flex;
   gap: 10px;
+  position: relative;
+  z-index: 2;
 }
 
 .inputField {
@@ -184,7 +214,9 @@
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .sendBtn:hover {

@@ -13,7 +13,6 @@ import {
 } from "./types";
 import "./App.css";
 import { getDialoguesForRelationship } from "./utils/dialogueManager";
-import { replaceMessagesPlaceholders } from "./utils/messageParser";
 import {
   savePlayerProfile,
   loadPlayerProfile,
@@ -77,13 +76,7 @@ function App() {
     );
     if (dialogues.length === 0) return [];
 
-    // Sostituisci i placeholder nei messaggi
-    const messagesWithPlaceholders = replaceMessagesPlaceholders(
-      [dialogues[0]],
-      playerProfile,
-      npc,
-    );
-    return messagesWithPlaceholders;
+    return [dialogues[0]];
   };
 
   // Conversazioni mappate per NPC - carica da localStorage se disponibili
@@ -166,6 +159,7 @@ function App() {
         npc_nyx: getInitialMessages("npc_nyx"),
         npc_sora: getInitialMessages("npc_sora"),
         npc_luna: getInitialMessages("npc_luna"),
+        npc_max: getInitialMessages("npc_max"),
       });
       setSelectedNpcId("npc_aurora");
       // Rimuovi il flag della prima visita per mostrare i messaggi di benvenuto originali
@@ -226,14 +220,7 @@ function App() {
           );
 
           if (nextMessage && selectedNpc) {
-            // Sostituisci i placeholder nel messaggio
-            const messageWithPlaceholders = replaceMessagesPlaceholders(
-              [nextMessage],
-              playerProfile,
-              selectedNpc,
-            )[0];
-
-            updatedMessages.push(messageWithPlaceholders);
+            updatedMessages.push(nextMessage);
 
             // Aggiorna il relationship level e l'array di npcProfiles
             if (selectedChoice.relationshipDelta) {

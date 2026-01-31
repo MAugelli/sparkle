@@ -35,6 +35,7 @@ export interface Message {
   text: string;
   timestamp: Date;
   choices?: MessageChoice[]; // Per dialoghi con scelte
+  nextMessageId?: string; // Per sequenze lineari senza scelte
 }
 
 // Scelta di risposta in un dialogo ramificato

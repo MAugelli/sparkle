@@ -206,41 +206,56 @@ function App() {
           (c) => c.text === message.text,
         );
 
-        if (selectedChoice && selectedChoice.nextMessageId) {
+        if (selectedChoice && selectedChoice.nextMessageId && selectedNpc) {
+          // Aggiorna il relationship level prima di ottenere i dialoghi
+          if (selectedChoice.relationshipDelta) {
+            const newRelationship = Math.min(
+              100,
+              Math.max(
+                0,
+                selectedNpc.relationshipLevel +
+                  selectedChoice.relationshipDelta,
+              ),
+            );
+
+            setNpcProfiles((prev) =>
+              prev.map((npc) =>
+                npc.id === selectedNpcId
+                  ? { ...npc, relationshipLevel: newRelationship }
+                  : npc,
+              ),
+            );
+          }
+
           // Cerca il messaggio successivo nei dialoghi del set
           const dialogueSet = dialogueSetsMap[selectedNpcId];
           if (!dialogueSet) return;
 
           const dialogues = getDialoguesForRelationship(
             dialogueSet,
-            selectedNpc?.relationshipLevel || 0,
-          );
-          const nextMessage = dialogues.find(
-            (m) => m.id === selectedChoice.nextMessageId,
+            selectedNpc.relationshipLevel +
+              (selectedChoice.relationshipDelta || 0),
           );
 
-          if (nextMessage && selectedNpc) {
+          // Segui la catena di nextMessageId fino a trovare un messaggio con choices
+          let currentMessageId: string | undefined =
+            selectedChoice.nextMessageId;
+          while (currentMessageId) {
+            const nextMessage = dialogues.find(
+              (m) => m.id === currentMessageId,
+            );
+
+            if (!nextMessage) break;
+
             updatedMessages.push(nextMessage);
 
-            // Aggiorna il relationship level e l'array di npcProfiles
-            if (selectedChoice.relationshipDelta) {
-              const newRelationship = Math.min(
-                100,
-                Math.max(
-                  0,
-                  selectedNpc.relationshipLevel +
-                    selectedChoice.relationshipDelta,
-                ),
-              );
-
-              setNpcProfiles((prev) =>
-                prev.map((npc) =>
-                  npc.id === selectedNpcId
-                    ? { ...npc, relationshipLevel: newRelationship }
-                    : npc,
-                ),
-              );
+            // Se il messaggio ha scelte, fermati
+            if (nextMessage.choices && nextMessage.choices.length > 0) {
+              break;
             }
+
+            // Altrimenti, continua con il nextMessageId
+            currentMessageId = nextMessage.nextMessageId;
           }
         }
       }

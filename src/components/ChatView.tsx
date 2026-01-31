@@ -1,16 +1,18 @@
 import { useRef, useEffect, useState } from 'react'
-import { NPCProfile, PlayerProfile, Message } from '../types'
+import { NPCProfile, Message, MessageChoice } from '../types'
+import ResponseChoices from './ResponseChoices'
 import styles from './ChatView.module.css'
 
 interface ChatViewProps {
   npcProfile?: NPCProfile
-  playerProfile: PlayerProfile
   messages: Message[]
+  onAddMessage?: (message: Message) => void
 }
 
-export default function ChatView({ npcProfile, playerProfile, messages }: ChatViewProps) {
+export default function ChatView({ npcProfile, messages, onAddMessage }: ChatViewProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [inputText, setInputText] = useState('')
+  const [waitingForResponse, setWaitingForResponse] = useState(false)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -18,9 +20,28 @@ export default function ChatView({ npcProfile, playerProfile, messages }: ChatVi
 
   const handleSendMessage = () => {
     if (inputText.trim()) {
-      console.log('Messaggio inviato:', inputText)
+      const playerMessage: Message = {
+        id: `msg_${Date.now()}`,
+        sender: 'player',
+        text: inputText,
+        timestamp: new Date(),
+      }
+      onAddMessage?.(playerMessage)
       setInputText('')
+      setWaitingForResponse(true)
     }
+  }
+
+  const handleChoiceSelect = (choice: MessageChoice) => {
+    // Aggiungi il messaggio della scelta
+    const playerMessage: Message = {
+      id: `msg_${Date.now()}`,
+      sender: 'player',
+      text: choice.text,
+      timestamp: new Date(),
+    }
+    onAddMessage?.(playerMessage)
+    setWaitingForResponse(true)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -37,6 +58,10 @@ export default function ChatView({ npcProfile, playerProfile, messages }: ChatVi
       </div>
     )
   }
+
+  // Controlla se l'ultimo messaggio ha scelte
+  const lastMessage = messages[messages.length - 1]
+  const hasChoices = lastMessage?.sender === 'npc' && lastMessage?.choices && lastMessage.choices.length > 0
 
   return (
     <div className={styles.chatContainer}>
@@ -89,19 +114,28 @@ export default function ChatView({ npcProfile, playerProfile, messages }: ChatVi
         <div ref={messagesEndRef} />
       </div>
 
-      <div className={styles.chatInputArea}>
-        <textarea
-          value={inputText}
-          onChange={e => setInputText(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Scrivi un messaggio..."
-          className={styles.inputField}
-          rows={3}
-        />
-        <button onClick={handleSendMessage} className={styles.sendBtn}>
-          Invia
-        </button>
-      </div>
+      {hasChoices && lastMessage?.choices ? (
+        <ResponseChoices choices={lastMessage.choices} onChoiceSelect={handleChoiceSelect} />
+      ) : (
+        <div className={styles.chatInputArea}>
+          <textarea
+            value={inputText}
+            onChange={e => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Scrivi un messaggio..."
+            className={styles.inputField}
+            rows={3}
+            disabled={waitingForResponse}
+          />
+          <button 
+            onClick={handleSendMessage} 
+            className={styles.sendBtn}
+            disabled={waitingForResponse}
+          >
+            {waitingForResponse ? '⏳' : 'Invia'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

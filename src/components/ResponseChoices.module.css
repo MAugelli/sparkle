@@ -1,0 +1,58 @@
+.choicesContainer {
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choicesLabel {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.choicesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choiceBtn {
+  padding: 12px 15px;
+  background: linear-gradient(135deg, rgba(255, 0, 204, 0.1), rgba(51, 51, 255, 0.1));
+  border: 2px solid rgba(255, 0, 204, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.choiceBtn:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 204, 0.2), rgba(51, 51, 255, 0.2));
+  border-color: #ff00cc;
+  transform: translateX(5px);
+}
+
+.choiceBtn:active {
+  transform: translateX(3px);
+}
+
+@media (max-width: 600px) {
+  .choicesGrid {
+    gap: 8px;
+  }
+
+  .choiceBtn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,216 @@
+.editorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at center, #2c022c 0%, #121212 100%);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.profileCard {
+  background: #f0f0f0;
+  color: #333;
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.profileCard h2 {
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: #121212;
+  text-align: center;
+  font-size: 28px;
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.errorMessage {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ff00cc;
+  font-size: 14px;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: inherit;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.textarea:focus {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ff00cc !important;
+  outline: none;
+  box-shadow: 0 0 8px rgba(255, 0, 204, 0.2);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #999;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.interestsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #e5e5e5;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.interestChip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.interestChip:hover {
+  background: rgba(255, 0, 204, 0.05);
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #ff00cc;
+  cursor: pointer;
+}
+
+.chipLabel {
+  font-size: 15px;
+  color: #333;
+  user-select: none;
+}
+
+.interestCount {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.formActions {
+  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.primaryBtn {
+  background: linear-gradient(45deg, #ff00cc, #3333ff) !important;
+  color: white !important;
+}
+
+.primaryBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(255, 0, 204, 0.4);
+}
+
+.primaryBtn:active {
+  transform: scale(0.98);
+}
+
+.secondaryBtn {
+  background: #ddd !important;
+  color: #333 !important;
+}
+
+.secondaryBtn:hover {
+  background: #ccc !important;
+  transform: scale(1.05);
+}
+
+.previewSection {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(255, 0, 204, 0.05);
+  border: 2px solid rgba(255, 0, 204, 0.2);
+  border-radius: 12px;
+}
+
+.previewSection h3 {
+  margin-top: 0;
+  color: #ff00cc;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.previewSection p {
+  color: #333;
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.previewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag {
+  background: rgba(255, 0, 204, 0.15);
+  border: 1px solid rgba(255, 0, 204, 0.3);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}

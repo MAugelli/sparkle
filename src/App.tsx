@@ -30,6 +30,7 @@ import { soraDialogueSet } from "./data/dialogues/sora-branched";
 import { lunaDialogueSet } from "./data/dialogues/luna-branched";
 import { maxDialogueSet } from "./data/dialogues/max-branched";
 import { replaceMessagesPlaceholders } from "./utils/messageParser";
+import { mattiaDialogueSet } from "./data/dialogues/mattia-branched";
 
 type AppScreen = "welcome" | "profile-editor" | "chat";
 
@@ -55,6 +56,7 @@ function App() {
 
   // Map dei DialogueSets per ogni NPC
   const dialogueSetsMap: Record<string, NPCDialogueSet> = {
+    npc_mattia: mattiaDialogueSet,
     npc_aurora: auroraDialogueSet,
     npc_nyx: nyxDialogueSet,
     npc_sora: soraDialogueSet,
@@ -69,10 +71,7 @@ function App() {
 
     if (!npc || !dialogueSet) return [];
 
-    const dialogues = getDialoguesForRelationship(
-      dialogueSet,
-      npc.relationshipLevel,
-    );
+    const dialogues = getDialoguesForRelationship(dialogueSet, 0);
     if (dialogues.length === 0) return [];
 
     return [dialogues[0]];
@@ -87,6 +86,7 @@ function App() {
       }
 
       return {
+        npc_mattia: getInitialMessages("npc_mattia"),
         npc_aurora: getInitialMessages("npc_aurora"),
         npc_nyx: getInitialMessages("npc_nyx"),
         npc_sora: getInitialMessages("npc_sora"),
@@ -155,6 +155,7 @@ function App() {
       // Resetta lo stato
       setPlayerProfile(DEFAULT_PLAYER_PROFILE);
       setConversations({
+        npc_mattia: getInitialMessages("npc_mattia"),
         npc_aurora: getInitialMessages("npc_aurora"),
         npc_nyx: getInitialMessages("npc_nyx"),
         npc_sora: getInitialMessages("npc_sora"),

@@ -73,7 +73,7 @@ export default function ChatView({
   }
 
   // Controlla se l'ultimo messaggio ha scelte
-  const lastMessage = chatMessages[messages.length - 1];
+  const lastMessage = messages[messages.length - 1];
   const hasChoices =
     lastMessage?.sender === "npc" &&
     lastMessage?.choices &&

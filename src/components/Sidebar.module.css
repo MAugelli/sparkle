@@ -1,0 +1,99 @@
+.sidebar {
+  background-color: #1e1e1e;
+  border-right: 1px solid #333;
+  padding: 20px;
+  color: white;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 0 0 20px 0;
+}
+
+.chatList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebarItem {
+  padding: 15px;
+  border-bottom: 1px solid #333;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebarItem:hover {
+  background-color: rgba(255, 0, 204, 0.05);
+}
+
+.sidebarItem.active {
+  background: #2c022c;
+  border-left: 3px solid #ff00cc;
+  padding-left: 12px;
+}
+
+.itemContent {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.avatar {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.characterName {
+  font-weight: bold;
+  color: #eee;
+  font-size: 14px;
+}
+
+.interests {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 3px;
+}
+
+.badge {
+  background: #ff00cc;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}

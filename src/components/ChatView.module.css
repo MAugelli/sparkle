@@ -1,0 +1,197 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: radial-gradient(circle at center, #2c022c 0%, #121212 100%);
+  overflow: hidden;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+}
+
+.chatHeader {
+  background-color: #1e1e1e;
+  padding: 15px 20px;
+  border-bottom: 1px solid #333;
+}
+
+.headerContent {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.avatar {
+  font-size: 32px;
+}
+
+.chatHeader h3 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
+
+.headerSubtitle {
+  margin: 5px 0 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.profileInfo {
+  background-color: rgba(30, 30, 30, 0.5);
+  padding: 15px 20px;
+  border-bottom: 1px solid #333;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profileRow {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.label {
+  font-weight: bold;
+  color: #ff00cc;
+  min-width: 80px;
+}
+
+.interestsTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: rgba(255, 0, 204, 0.15);
+  border: 1px solid rgba(255, 0, 204, 0.3);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.relationshipBar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-grow: 1;
+  max-width: 150px;
+}
+
+.relationshipFill {
+  height: 100%;
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.chatMessages {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chatMessages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatMessages::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.chatMessages::-webkit-scrollbar-thumb {
+  background: #ff00cc;
+  border-radius: 10px;
+}
+
+.msg {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 70%;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.npc {
+  background: #e9e9eb;
+  align-self: flex-start;
+  color: #000;
+}
+
+.player {
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  color: white;
+  align-self: flex-end;
+}
+
+.chatInputArea {
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 10px;
+}
+
+.inputField {
+  flex-grow: 1;
+  padding: 12px 15px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #2a2a2a;
+  color: white;
+  font-family: inherit;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #ff00cc;
+  box-shadow: 0 0 8px rgba(255, 0, 204, 0.2);
+}
+
+.inputField::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sendBtn {
+  padding: 12px 30px;
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sendBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(255, 0, 204, 0.4);
+}
+
+.sendBtn:active {
+  transform: scale(0.98);
+}

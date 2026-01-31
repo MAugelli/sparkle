@@ -1,39 +1,96 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import ChatView from './components/ChatView'
 import WelcomeScreen from './components/WelcomeScreen'
 import ProfileEditor from './components/ProfileEditor'
 import { NPC_PROFILES, DEFAULT_PLAYER_PROFILE } from './data'
-import { auroraDialogues } from './data/dialogues/aurora'
-import { nyxDialogues } from './data/dialogues/nyx'
-import { soraDialogues } from './data/dialogues/sora'
-import { lunaDialogues } from './data/dialogues/luna'
-import { NPCProfile, PlayerProfile, Message, Chat as ChatType } from './types'
+import { NPCProfile, PlayerProfile, Message, Chat as ChatType, NPCDialogueSet } from './types'
 import './App.css'
+import { getDialoguesForRelationship } from './utils/dialogueManager'
+import {
+  savePlayerProfile,
+  loadPlayerProfile,
+  saveConversations,
+  loadConversations,
+  saveNpcRelationships,
+  loadNpcRelationships,
+  applyRelationshipsToNpcs,
+} from './utils/storage'
+import { auroraDialogueSet } from './data/dialogues/aurora-branched'
+import { nyxDialogueSet } from './data/dialogues/nyx-branched'
+import { soraDialogueSet } from './data/dialogues/sora-branched'
+import { lunaDialogueSet } from './data/dialogues/luna-branched'
 
 type AppScreen = 'welcome' | 'profile-editor' | 'chat'
 
 function App() {
   const [screen, setScreen] = useState<AppScreen>('welcome')
   const [selectedNpcId, setSelectedNpcId] = useState<string | null>('npc_aurora')
-  const [playerProfile, setPlayerProfile] = useState<PlayerProfile>(DEFAULT_PLAYER_PROFILE)
-  const [npcProfiles] = useState<NPCProfile[]>(NPC_PROFILES)
+  
+  // Inizializza playerProfile da localStorage o default
+  const [playerProfile, setPlayerProfile] = useState<PlayerProfile>(() => {
+    const saved = loadPlayerProfile()
+    return saved || DEFAULT_PLAYER_PROFILE
+  })
 
-  // Map dei dialoghi per NPC
-  const dialoguesMap: Record<string, Message[]> = {
-    npc_aurora: auroraDialogues,
-    npc_nyx: nyxDialogues,
-    npc_sora: soraDialogues,
-    npc_luna: lunaDialogues,
+  // Inizializza npcProfiles con relazioni salvate
+  const [npcProfiles, setNpcProfiles] = useState<NPCProfile[]>(() => {
+    const profiles = [...NPC_PROFILES]
+    const savedRelationships = loadNpcRelationships()
+    if (savedRelationships) {
+      return applyRelationshipsToNpcs(profiles, savedRelationships)
+    }
+    return profiles
+  })
+
+  // Map dei DialogueSets per ogni NPC
+  const dialogueSetsMap: Record<string, NPCDialogueSet> = {
+    npc_aurora: auroraDialogueSet,
+    npc_nyx: nyxDialogueSet,
+    npc_sora: soraDialogueSet,
+    npc_luna: lunaDialogueSet,
   }
 
-  // Conversazioni mappate per NPC - ora inizializzate con il primo messaggio di dialogo
-  const [conversations, setConversations] = useState<Record<string, Message[]>>({
-    npc_aurora: [auroraDialogues[0]],
-    npc_nyx: [nyxDialogues[0]],
-    npc_sora: [soraDialogues[0]],
-    npc_luna: [lunaDialogues[0]],
+  // Converti DialogueSet in messaggio iniziale per ogni NPC
+  const getInitialMessages = (npcId: string): Message[] => {
+    const npc = npcProfiles.find(p => p.id === npcId)
+    const dialogueSet = dialogueSetsMap[npcId]
+    
+    if (!npc || !dialogueSet) return []
+    
+    const dialogues = getDialoguesForRelationship(dialogueSet, npc.relationshipLevel)
+    return dialogues.length > 0 ? [dialogues[0]] : []
+  }
+
+  // Conversazioni mappate per NPC - carica da localStorage se disponibili
+  const [conversations, setConversations] = useState<Record<string, Message[]>>(() => {
+    const saved = loadConversations()
+    if (saved) {
+      return saved
+    }
+    
+    return {
+      npc_aurora: getInitialMessages('npc_aurora'),
+      npc_nyx: getInitialMessages('npc_nyx'),
+      npc_sora: getInitialMessages('npc_sora'),
+      npc_luna: getInitialMessages('npc_luna'),
+    }
   })
+
+  // Salva playerProfile quando cambia
+  useEffect(() => {
+    savePlayerProfile(playerProfile)
+  }, [playerProfile])
+
+  // Salva conversazioni quando cambiano
+  useEffect(() => {
+    saveConversations(conversations)
+  }, [conversations])
+
+  // Salva relazioni NPC quando cambiano
+  useEffect(() => {
+    saveNpcRelationships(npcProfiles)
+  }, [npcProfiles])
 
   // Costruisci la lista di chat dalla lista NPC
   const chats: ChatType[] = npcProfiles.map((npc, idx) => ({
@@ -48,6 +105,10 @@ function App() {
 
   const handleStartProfile = () => {
     setScreen('profile-editor')
+  }
+
+  const handleContinueGame = () => {
+    setScreen('chat')
   }
 
   const handleProfileSaved = (profile: PlayerProfile) => {
@@ -77,20 +138,30 @@ function App() {
         const selectedChoice = previousMessage.choices.find(c => c.text === message.text)
 
         if (selectedChoice && selectedChoice.nextMessageId) {
-          // Cerca il messaggio successivo nei dialoghi
-          const allDialogues = dialoguesMap[selectedNpcId]
-          const nextMessage = allDialogues.find(m => m.id === selectedChoice.nextMessageId)
+          // Cerca il messaggio successivo nei dialoghi del set
+          const dialogueSet = dialogueSetsMap[selectedNpcId]
+          if (!dialogueSet) return
+
+          const dialogues = getDialoguesForRelationship(dialogueSet, selectedNpc?.relationshipLevel || 0)
+          const nextMessage = dialogues.find(m => m.id === selectedChoice.nextMessageId)
 
           if (nextMessage) {
             updatedMessages.push(nextMessage)
 
-            // Aggiorna il relationship level se presente
+            // Aggiorna il relationship level e l'array di npcProfiles
             if (selectedChoice.relationshipDelta && selectedNpc) {
               const newRelationship = Math.min(
                 100,
-                selectedNpc.relationshipLevel + selectedChoice.relationshipDelta
+                Math.max(0, selectedNpc.relationshipLevel + selectedChoice.relationshipDelta)
               )
-              selectedNpc.relationshipLevel = newRelationship
+              
+              setNpcProfiles(prev =>
+                prev.map(npc =>
+                  npc.id === selectedNpcId
+                    ? { ...npc, relationshipLevel: newRelationship }
+                    : npc
+                )
+              )
             }
           }
         }
@@ -105,7 +176,14 @@ function App() {
 
   // Render basato su screen
   if (screen === 'welcome') {
-    return <WelcomeScreen onStartProfile={handleStartProfile} />
+    const hasSavedData = !!loadPlayerProfile()
+    return (
+      <WelcomeScreen
+        onStartProfile={handleStartProfile}
+        onContinueGame={handleContinueGame}
+        hasSavedData={hasSavedData}
+      />
+    )
   }
 
   if (screen === 'profile-editor') {

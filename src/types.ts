@@ -52,3 +52,15 @@ export interface Conversation {
   startedAt: Date
   lastMessageAt: Date
 }
+
+// Dialogo che varia in base al livello di relazione
+export interface DialogueVariation {
+  minRelationshipLevel: number // Minimum relationship level to see this variant
+  messages: Message[] // Dialogue messages for this relationship tier
+}
+
+// Set completo di dialoghi per un NPC con variazioni
+export interface NPCDialogueSet {
+  npcId: string
+  variations: DialogueVariation[] // Ordered from lowest to highest relationship
+}

@@ -79,6 +79,9 @@ export default function ChatView({
     lastMessage?.choices &&
     lastMessage.choices.length > 0;
 
+  const x = chatMessages.filter((r) => r.id === lastMessage.id);
+  console.log(x, "prova");
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.bgWrap}>
@@ -326,6 +329,7 @@ export default function ChatView({
       {hasChoices && lastMessage?.choices ? (
         <ResponseChoices
           choices={lastMessage.choices}
+          lastMessge={x[0]}
           onChoiceSelect={handleChoiceSelect}
         />
       ) : (

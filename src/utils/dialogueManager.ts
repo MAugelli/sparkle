@@ -8,7 +8,6 @@ export const getDialoguesForRelationship = (
   dialogueSet: NPCDialogueSet,
   relationshipLevel: number,
 ): Message[] => {
-  debugger;
   // Ordina le variazioni per livello di relazione (crescente)
   const sortedVariations = [...dialogueSet.variations].sort(
     (a, b) => a.minRelationshipLevel - b.minRelationshipLevel,

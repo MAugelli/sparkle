@@ -1,26 +1,31 @@
-import { MessageChoice } from '../types'
-import styles from './ResponseChoices.module.css'
+import { Message, MessageChoice } from "../types";
+import styles from "./ResponseChoices.module.css";
 
 interface ResponseChoicesProps {
-  choices: MessageChoice[]
-  onChoiceSelect: (choice: MessageChoice) => void
+  choices: MessageChoice[];
+  lastMessge: Message | undefined;
+  onChoiceSelect: (choice: MessageChoice) => void;
 }
 
-export default function ResponseChoices({ choices, onChoiceSelect }: ResponseChoicesProps) {
+export default function ResponseChoices({
+  choices,
+  lastMessge,
+  onChoiceSelect,
+}: ResponseChoicesProps) {
   return (
     <div className={styles.choicesContainer}>
       <p className={styles.choicesLabel}>Scegli una risposta:</p>
       <div className={styles.choicesGrid}>
-        {choices.map(choice => (
+        {choices.map((choice, i) => (
           <button
             key={choice.id}
             className={styles.choiceBtn}
             onClick={() => onChoiceSelect(choice)}
           >
-            {choice.text}
+            {lastMessge?.choices?.[i]?.text ?? "non so che dire..."}
           </button>
         ))}
       </div>
     </div>
-  )
+  );
 }

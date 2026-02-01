@@ -32,6 +32,8 @@ import { maxDialogueSet } from "./data/dialogues/max-branched";
 import { replaceMessagesPlaceholders } from "./utils/messageParser";
 import { mattiaDialogueSet } from "./data/dialogues/mattia-branched";
 import { saraDialogueSet } from "./data/dialogues/sara-branched";
+import { aliceDialogueSet } from "./data/dialogues/alice-branched";
+import { nihalDialogueSet } from "./data/dialogues/nihal-branched";
 
 type AppScreen = "welcome" | "profile-editor" | "chat";
 
@@ -64,6 +66,8 @@ function App() {
     npc_sora: soraDialogueSet,
     npc_luna: lunaDialogueSet,
     npc_max: maxDialogueSet,
+    npc_alice: aliceDialogueSet,
+    npc_nihal: nihalDialogueSet,
   };
 
   // Converti DialogueSet in messaggio iniziale per ogni NPC
@@ -94,6 +98,9 @@ function App() {
         npc_sora: getInitialMessages("npc_sora"),
         npc_luna: getInitialMessages("npc_luna"),
         npc_max: getInitialMessages("npc_max"),
+        npc_alice: getInitialMessages("npc_alice"),
+        npc_nihal: getInitialMessages("npc_nihal"),
+        npc_sara: getInitialMessages("npc_sara"),
       };
     },
   );
@@ -165,6 +172,8 @@ function App() {
         npc_luna: getInitialMessages("npc_luna"),
         npc_max: getInitialMessages("npc_max"),
         npc_sara: getInitialMessages("npc_sara"),
+        npc_alice: getInitialMessages("npc_alice"),
+        npc_nihal: getInitialMessages("npc_nihal"),
       });
       // Rimuovi il flag della prima visita per mostrare i messaggi di benvenuto originali
       localStorage.removeItem("sparkle_first_visit_completed");

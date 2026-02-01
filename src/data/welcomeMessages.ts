@@ -5,9 +5,6 @@
 export const WELCOME_TITLES = [
   "Benvenuto su Sparkle",
   "Bentornato su Sparkle",
-  "Ancora qui? 💕",
-  "Eccoti di nuovo!",
-  "Mi sei mancato 😊",
   "Welcome back, casanova!",
   "Spero ti vada meglio oggi",
   "Round 2? 🔄",
@@ -26,11 +23,15 @@ export const WELCOME_SUBTITLES = [
   "Non vedi l'ora di ricominciare?",
   "Quale maschera indossi oggi?",
   "Forse oggi trovate quella scintilla... ✨",
-  "Torniamo in pista!",
-  "Spero le tue ultime conversazioni siano andate bene!",
-  "Pronti per altre emozioni?",
-  "Chi sai cosa succederà questa volta... 🎲",
-  "Non preoccuparti, la maschera nasconde bene le tue intenzioni.",
+  "Non preoccuparti, la maschera nasconde bene le tue intenzioni",
+  "Assicurati che i fori per gli occhi siano allineati correttamente",
+  "Abbiamo tutti più facce. Quale userai con noi stavolta?",
+  "Il lattice aderisce perfettamente alla tua pelle, vero?",
+  "Non provare a toglierla. Potresti farti male",
+  "Chi stai cercando di ingannare oggi?",
+  "Ti abbiamo trovato il match perfetto. Sa già dove abiti.",
+  "Abbiamo aggiornato i termini di servizio: ora possediamo anche i tuoi respiri",
+  "Speriamo che stavolta tu riesca a finire la conversazione... 😉",
 ];
 
 export const BUTTON_TEXT = [
@@ -42,6 +43,14 @@ export const BUTTON_TEXT = [
   "Ti conviene un aggiornamento",
   "Rinnova il tuo profilo",
   "Cambia la maschera",
+  "Incolla una nuova faccia",
+  "Taglia e cuci la tua identità",
+  "Indossa un nuovo volto",
+  "Scegli un'altra bugia",
+  "Affila il tuo sorriso",
+  "La maschera precedente è rotta",
+  "Trucca il tuo vuoto",
+  "Dimentica chi eri",
 ];
 
 /**

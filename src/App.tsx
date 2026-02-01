@@ -31,6 +31,7 @@ import { lunaDialogueSet } from "./data/dialogues/luna-branched";
 import { maxDialogueSet } from "./data/dialogues/max-branched";
 import { replaceMessagesPlaceholders } from "./utils/messageParser";
 import { mattiaDialogueSet } from "./data/dialogues/mattia-branched";
+import { saraDialogueSet } from "./data/dialogues/sara-branched";
 
 type AppScreen = "welcome" | "profile-editor" | "chat";
 
@@ -56,6 +57,7 @@ function App() {
 
   // Map dei DialogueSets per ogni NPC
   const dialogueSetsMap: Record<string, NPCDialogueSet> = {
+    npc_sara: saraDialogueSet,
     npc_mattia: mattiaDialogueSet,
     npc_aurora: auroraDialogueSet,
     npc_nyx: nyxDialogueSet,
@@ -162,6 +164,7 @@ function App() {
         npc_sora: getInitialMessages("npc_sora"),
         npc_luna: getInitialMessages("npc_luna"),
         npc_max: getInitialMessages("npc_max"),
+        npc_sara: getInitialMessages("npc_sara"),
       });
       // Rimuovi il flag della prima visita per mostrare i messaggi di benvenuto originali
       localStorage.removeItem("sparkle_first_visit_completed");

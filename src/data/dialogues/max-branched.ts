@@ -241,7 +241,7 @@ const growingBondDialogues: Message[] = [
     id: "max_msg_16",
     sender: "npc",
     text: "La forza non è costante. La disciplina sì. È questo che la gente confonde.",
-    nextMessageId: "max_msg_16",
+    nextMessageId: "max_msg_17",
     timestamp: new Date(),
   },
   {
@@ -1060,19 +1060,19 @@ export const maxDialogueSet: NPCDialogueSet = {
       messages: firstMeetingDialogues,
     },
     {
-      minRelationshipLevel: 4,
+      minRelationshipLevel: 4, // Raggiungibile con 4-6 punti dal Set 1
       messages: growingBondDialogues,
     },
     {
-      minRelationshipLevel: 7,
+      minRelationshipLevel: 7, // Raggiungibile con 8 punti (Set 1 + Set 2)
       messages: deepBondDialogues,
     },
     {
-      minRelationshipLevel: 10,
+      minRelationshipLevel: 12, // Raggiungibile con 12-16 punti
       messages: intenseBondDialogues,
     },
     {
-      minRelationshipLevel: 11,
+      minRelationshipLevel: 18, // Raggiungibile completando Set 4
       messages: epilogueDialogues,
     },
   ],

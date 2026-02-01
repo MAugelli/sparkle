@@ -154,6 +154,7 @@ function App() {
       clearAllSavedData();
       // Resetta lo stato
       setPlayerProfile(DEFAULT_PLAYER_PROFILE);
+      setNpcProfiles([...NPC_PROFILES]);
       setConversations({
         npc_mattia: getInitialMessages("npc_mattia"),
         npc_aurora: getInitialMessages("npc_aurora"),
@@ -191,6 +192,8 @@ function App() {
     setScreen("chat");
   };
 
+  // FIX CORRETTO per handleAddMessage in App.tsx
+
   const handleAddMessage = (message: Message) => {
     if (!selectedNpcId) return;
 
@@ -200,16 +203,20 @@ function App() {
     if (message.sender === "player" && currentMessages.length > 0) {
       const previousMessage = currentMessages[currentMessages.length - 1];
 
-      if (previousMessage.choices) {
+      if (previousMessage.choices && selectedNpc) {
         // Trova la scelta selezionata dall'utente
         const selectedChoice = previousMessage.choices.find(
           (c) => c.text === message.text,
         );
 
-        if (selectedChoice && selectedChoice.nextMessageId && selectedNpc) {
-          // Aggiorna il relationship level prima di ottenere i dialoghi
+        if (selectedChoice && selectedChoice.nextMessageId) {
+          const dialogueSet = dialogueSetsMap[selectedNpcId];
+          if (!dialogueSet) return;
+
+          // Calcola il NUOVO relationship level
+          let newRelationship = selectedNpc.relationshipLevel;
           if (selectedChoice.relationshipDelta) {
-            const newRelationship = Math.min(
+            newRelationship = Math.min(
               100,
               Math.max(
                 0,
@@ -218,6 +225,7 @@ function App() {
               ),
             );
 
+            // Aggiorna subito il relationship
             setNpcProfiles((prev) =>
               prev.map((npc) =>
                 npc.id === selectedNpcId
@@ -227,34 +235,41 @@ function App() {
             );
           }
 
-          // Cerca il messaggio successivo nei dialoghi del set
-          const dialogueSet = dialogueSetsMap[selectedNpcId];
-          if (!dialogueSet) return;
+          // CHIAVE: Cerca in TUTTI i set disponibili, non solo in quello corrente
+          // Concatena tutti i messaggi di tutte le variazioni
+          const allMessages: Message[] = [];
+          for (const variation of dialogueSet.variations) {
+            allMessages.push(...variation.messages);
+          }
 
-          const dialogues = getDialoguesForRelationship(
-            dialogueSet,
-            selectedNpc.relationshipLevel +
-              (selectedChoice.relationshipDelta || 0),
-          );
-
-          // Segui la catena di nextMessageId fino a trovare un messaggio con choices
+          // Segui la catena di nextMessageId
           let currentMessageId: string | undefined =
             selectedChoice.nextMessageId;
+
           while (currentMessageId) {
-            const nextMessage = dialogues.find(
+            // Cerca il messaggio in TUTTI i messaggi disponibili
+            const nextMessage = allMessages.find(
               (m) => m.id === currentMessageId,
             );
 
-            if (!nextMessage) break;
+            if (!nextMessage) {
+              console.warn(`Messaggio ${currentMessageId} non trovato`);
+              break;
+            }
 
             updatedMessages.push(nextMessage);
 
-            // Se il messaggio ha scelte, fermati
+            // Se il messaggio ha scelte, fermati qui
             if (nextMessage.choices && nextMessage.choices.length > 0) {
               break;
             }
 
-            // Altrimenti, continua con il nextMessageId
+            // Se non ha nextMessageId, è la fine
+            if (!nextMessage.nextMessageId) {
+              break;
+            }
+
+            // Continua con il prossimo
             currentMessageId = nextMessage.nextMessageId;
           }
         }

@@ -483,10 +483,25 @@ const mattiaEpilogueDialogues: Message[] = [
 export const mattiaDialogueSet: NPCDialogueSet = {
   npcId: "npc_mattia",
   variations: [
-    { minRelationshipLevel: 0, messages: mattiaFirstDialogues },
-    { minRelationshipLevel: 10, messages: mattiaGrowingDialogues },
-    { minRelationshipLevel: 25, messages: mattiaDeepDialogues },
-    { minRelationshipLevel: 50, messages: mattiaIntenseDialogues },
-    { minRelationshipLevel: 60, messages: mattiaEpilogueDialogues },
+    {
+      minRelationshipLevel: 0,
+      messages: mattiaFirstDialogues,
+    },
+    {
+      minRelationshipLevel: 4, // Raggiungibile con 4-6 punti dal Set 1
+      messages: mattiaGrowingDialogues,
+    },
+    {
+      minRelationshipLevel: 7, // Raggiungibile con 7-9 punti
+      messages: mattiaDeepDialogues,
+    },
+    {
+      minRelationshipLevel: 10, // Raggiungibile con 10-13 punti
+      messages: mattiaIntenseDialogues,
+    },
+    {
+      minRelationshipLevel: 13, // Raggiungibile completando Set 4
+      messages: mattiaEpilogueDialogues,
+    },
   ],
 };

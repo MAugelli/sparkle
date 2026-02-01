@@ -26,6 +26,12 @@ export const AVAILABLE_INTERESTS = [
   "Psicologia",
   "Volontariato",
   "Crescita personale",
+  "Lingue",
+  "Connessioni",
+  "Successo",
+  "Networking",
+  "Performance",
+  "Ottimizzazione",
 ];
 
 // Profilo del giocatore (di default, può essere customizzato)

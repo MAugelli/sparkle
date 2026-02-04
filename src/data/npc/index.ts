@@ -8,6 +8,7 @@ import { NPCProfile } from "../../types";
 import { Sara } from "./sara";
 import { Alice } from "./alice";
 import { Nihal } from "./nihal";
+import { Gabriele } from "./gabriele";
 
 export { Aurora, Nyx, Sora, Luna, Max, Mattia };
 
@@ -21,4 +22,5 @@ export const NPC_PROFILES: NPCProfile[] = [
   Sara,
   Alice,
   Nihal,
+  Gabriele,
 ];

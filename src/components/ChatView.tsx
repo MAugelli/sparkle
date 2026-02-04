@@ -16,7 +16,7 @@ export default function ChatView({
   userProfile,
   messages,
   onAddMessage,
-}: ChatViewProps) {
+}: Readonly<ChatViewProps>) {
   const chatMessages = replaceMessagesPlaceholders(
     messages,
     userProfile!,
@@ -26,10 +26,22 @@ export default function ChatView({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [inputText, setInputText] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if (waitingForResponse && isTyping) {
+      // Clear typing indicator when new messages arrive
+      const timer = setTimeout(() => {
+        setIsTyping(false);
+        setWaitingForResponse(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [messages, waitingForResponse, isTyping]);
 
   const handleSendMessage = () => {
     if (inputText.trim()) {
@@ -42,6 +54,13 @@ export default function ChatView({
       onAddMessage?.(playerMessage);
       setInputText("");
       setWaitingForResponse(true);
+
+      // Simulate NPC typing delay with random duration (500ms to 2000ms)
+      const delay = Math.random() * 2000 + 500;
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+      }, delay);
     }
   };
 
@@ -55,13 +74,41 @@ export default function ChatView({
     };
     onAddMessage?.(playerMessage);
     setWaitingForResponse(true);
+
+    // Simulate NPC typing delay with random duration (500ms to 2000ms)
+    const delay = Math.random() * 1500 + 500;
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+    }, delay);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const formatTime = (date: Date): string => {
+    const now = new Date();
+    const messageDate = new Date(date);
+    const diffMs = now.getTime() - messageDate.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Ora";
+    if (diffMins < 60) return `${diffMins}m fa`;
+    if (diffHours < 24) return `${diffHours}h fa`;
+    if (diffDays < 7) return `${diffDays}g fa`;
+
+    return messageDate.toLocaleDateString("it-IT", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   if (!npcProfile) {
@@ -73,14 +120,15 @@ export default function ChatView({
   }
 
   // Controlla se l'ultimo messaggio ha scelte
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage = messages.at(-1);
   const hasChoices =
     lastMessage?.sender === "npc" &&
     lastMessage?.choices &&
     lastMessage.choices.length > 0;
 
-  const x = chatMessages.filter((r) => r.id === lastMessage.id);
-  console.log(x, "prova");
+  const x = lastMessage
+    ? chatMessages.filter((r) => r.id === lastMessage.id)
+    : [];
 
   return (
     <div className={styles.chatContainer}>
@@ -318,11 +366,33 @@ export default function ChatView({
       </div>
 
       <div className={styles.chatMessages}>
-        {chatMessages.map((msg) => (
-          <div key={msg.id} className={`${styles.msg} ${styles[msg.sender]}`}>
-            {msg.text}
+        {chatMessages.map((msg, index) => {
+          // Hide the last NPC message if currently typing
+          if (
+            isTyping &&
+            msg.sender === "npc" &&
+            index === chatMessages.length - 1
+          ) {
+            return null;
+          }
+          return (
+            <div key={msg.id} className={`${styles.msg} ${styles[msg.sender]}`}>
+              {msg.text}
+              <span className={styles.timestamp}>
+                {formatTime(msg.timestamp)}
+              </span>
+            </div>
+          );
+        })}
+        {isTyping && (
+          <div
+            className={`${styles.msg} ${styles.npc} ${styles.typingIndicator}`}
+          >
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
           </div>
-        ))}
+        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -337,7 +407,7 @@ export default function ChatView({
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             placeholder="Scrivi un messaggio..."
             className={styles.inputField}
             rows={3}

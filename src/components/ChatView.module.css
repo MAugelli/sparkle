@@ -158,6 +158,15 @@
   max-width: 70%;
   font-size: 14px;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timestamp {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
 }
 
 .npc {
@@ -166,10 +175,18 @@
   color: #000;
 }
 
+.npc .timestamp {
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .player {
   background: linear-gradient(45deg, #ff00cc, #3333ff);
   color: white;
   align-self: flex-end;
+}
+
+.player .timestamp {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .chatInputArea {
@@ -225,4 +242,40 @@
 
 .sendBtn:active {
   transform: scale(0.98);
+}
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 15px !important;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #666;
+  animation: typing 2.5s infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
 }
